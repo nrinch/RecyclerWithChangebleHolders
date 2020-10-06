@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="default_height_list_item">96dp</dimen>
+    <dimen name="full_height_list_item">240dp</dimen>
+    <dimen name="list_item_margin">12dp</dimen>
+    <dimen name="list_item_corner_radius">24dp</dimen>
+    <dimen name="default_items_size">64dp</dimen>
+</resources>
