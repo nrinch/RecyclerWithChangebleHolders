@@ -27,11 +27,19 @@ public class PurseAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private static final int DEFAULT_TYPE = 0;
     private static final int FUll_TYPE = 1;
-    List<Integer> stateViewHolders;
-    List<Purse> purseList;
+    private List<Integer> stateViewHolders;
+    private List<Purse> purseList;
+    private PurseAdapterClickListener purseAdapterClickListener;
 
-    public PurseAdapter(List<Purse> purseList) {
+    public interface PurseAdapterClickListener{
+        void onClickFullTypeView(Purse purse);
+        void onClickDefaultView(Purse purse);
+        void defaultOnClick(Purse purse);
+    }
+
+    public PurseAdapter(List<Purse> purseList,PurseAdapterClickListener purseAdapterClickListener) {
         this.purseList = purseList;
+        this.purseAdapterClickListener = purseAdapterClickListener;
         stateViewHolders = new ArrayList<>(Arrays.asList(new Integer[purseList.size()]));
         Collections.fill(stateViewHolders, DEFAULT_TYPE);
     }
@@ -79,7 +87,7 @@ public class PurseAdapter extends RecyclerView.Adapter<ViewHolder> {
         Button submit;
         Button delete;
 
-
+        View view;
         public FullViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.full_item_name);
@@ -87,16 +95,27 @@ public class PurseAdapter extends RecyclerView.Adapter<ViewHolder> {
             key = itemView.findViewById(R.id.full_item_key);
             submit = itemView.findViewById(R.id.full_item_submit);
             delete = itemView.findViewById(R.id.full_item_delete);
+            view = itemView;
         }
 
         void bind(Purse purse, int position) {
             name.setText(purse.getName());
             key.setText(purse.getKey());
 
-            submit.setOnClickListener(view -> {
+            if(purseAdapterClickListener!=null){
+                purseAdapterClickListener.onClickFullTypeView(purse);
+                purseAdapterClickListener.defaultOnClick(purse);
+            }
+
+            view.setOnClickListener(view -> {
                 stateViewHolders.set(position, DEFAULT_TYPE);
                 notifyItemChanged(position);
             });
+
+//            submit.setOnClickListener(view -> {
+//                stateViewHolders.set(position, DEFAULT_TYPE);
+//                notifyItemChanged(position);
+//            });
 
             delete.setOnClickListener(view -> {
                 purseList.remove(position);
@@ -122,6 +141,10 @@ public class PurseAdapter extends RecyclerView.Adapter<ViewHolder> {
         void bind(Purse purse, int position) {
             name.setText(purse.getName());
             view.setOnClickListener(v -> {
+                if(purseAdapterClickListener!=null){
+                    purseAdapterClickListener.onClickDefaultView(purse);
+                    purseAdapterClickListener.defaultOnClick(purse);
+                }
                 stateViewHolders.set(position, FUll_TYPE);
                 notifyItemChanged(position);
             });

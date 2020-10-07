@@ -33,4 +33,13 @@ public class Purse {
     public void setKey(String key) {
         this.key = key;
     }
+
+    @Override
+    public String toString() {
+        return "Purse{" +
+                "name='" + name + '\'' +
+                ", key='" + key + '\'' +
+                ", expanded=" + expanded +
+                '}';
+    }
 }
